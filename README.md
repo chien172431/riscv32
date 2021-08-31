@@ -1,1 +1,3 @@
-# riscv32
+# RISCV32I
+
+RISCV verilog implement
