@@ -32,7 +32,7 @@ module forwarding_unit (
 );
 
 //----------------------------------------------------------------
-//         Data Memory
+//         Forward input to the first operand of ALU
 //----------------------------------------------------------------
 always_comb begin : proc_forward_ex_hazard
   // MUX A
@@ -46,7 +46,7 @@ always_comb begin : proc_forward_ex_hazard
 end
 
 //----------------------------------------------------------------
-//         Data Memory
+//         Forward input to the second operand of ALU
 //----------------------------------------------------------------
 always_comb begin : proc_forward_mem_hazard
   // MUX B
@@ -60,10 +60,9 @@ always_comb begin : proc_forward_mem_hazard
 end
 
 //----------------------------------------------------------------
-//         Data Memory
+//         Forward input to the first operand of branch compare
 //----------------------------------------------------------------
 always_comb begin : proc_forward_alu_result_to_branch_compare
-  // forward alu result back to branch compare
   if (branch && (ID_EX_rd != 0) && ID_EX_reg_write && (IF_ID_rs1 == ID_EX_rd)) begin
     forward_comp1 = 2'b01;
   end
@@ -71,12 +70,10 @@ always_comb begin : proc_forward_alu_result_to_branch_compare
     forward_comp1 = 2'b10;
   end
   else forward_comp1 = 2'b00;
-  // forward alu result back to branch compare
-
 end
 
 //----------------------------------------------------------------
-//         Data Memory
+//         Forward input to the second operand of branch compare
 //----------------------------------------------------------------
 always_comb begin : proc_forward_mem_to_branch_compare // forward mem result to branch compare
   if (branch && (EX_MEM_rd != 0) && ~(ID_EX_reg_write && (IF_ID_rs1 == ID_EX_rd)) && EX_MEM_reg_write && (EX_MEM_rd == IF_ID_rs2)) begin

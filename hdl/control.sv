@@ -14,7 +14,7 @@
 //    Date    : July 23rd 2021
 //----------------------------------------------------------------
 module control (
-  input         [31:0] IF_ID_inst        ,
+  input         [31:0] IF_ID_inst        , // assembly instruction
   input                br_eq             , // branch compare equal
   output  logic [ 1:0] alu_op            , // alu operation for alu control
   output  logic        alu_src           , // alu source mux 2to1 control
@@ -30,10 +30,10 @@ module control (
 
 logic [6:0] IF_ID_inst_opcode;
 logic [3:0] IF_ID_inst_func;
-assign  pc_src            = branch & br_eq;
-assign  IF_flush          = branch & br_eq;
-assign  IF_ID_inst_opcode = IF_ID_inst [6:0];
-assign  IF_ID_inst_func   = {IF_ID_inst[30],IF_ID_inst[14:12]};
+assign  pc_src            = branch & br_eq;   // pc source to decide to branch or not
+assign  IF_flush          = branch & br_eq;   // sigal decide to flush ID/IF register or not
+assign  IF_ID_inst_opcode = IF_ID_inst [6:0]; // instruction opcode field
+assign  IF_ID_inst_func   = {IF_ID_inst[30],IF_ID_inst[14:12]}; // instruction function field
 
 //----------------------------------------------------------------
 //         Opcopde
@@ -51,7 +51,7 @@ localparam [2:0]  R = 3'b001,
                   J = 3'b101;
 
 //----------------------------------------------------------------
-//         ALU Operations
+//         All signal ouput of control module depend on the opcode
 //----------------------------------------------------------------
 always_comb begin : proc_control_output_compute
   case (IF_ID_inst_opcode)
